@@ -37,7 +37,10 @@ export interface PlayerData {
 
 export interface GameType {
     players: PlayerData[],
-    startGame(): void,
+    dealerIndex: number,
+    playersNumber: number,
+    initPlayers(): void,
+    giveCards(): void,
     swapCards(fpIndex: number): void
 
 }

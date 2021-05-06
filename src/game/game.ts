@@ -1,4 +1,4 @@
-import { DeckType, GameType, PlayerData, Status } from "../types";
+import { DeckType, GameType, PlayerData, SingleCard, Status } from "../types";
 
 import { Deck } from "./deck";
 import { Player } from "./player";
@@ -11,20 +11,34 @@ export class Game implements GameType {
 
     public deck: DeckType
 
+    public dealerIndex: number
+
     constructor(playersNumber: number) {
         this.deck = new Deck() as DeckType
         this.deck.shuffle()
         this.playersNumber = playersNumber
         this.players = []
+        this.dealerIndex = 0
     }
 
-    public startGame() {
+    public initPlayers(): void {
         for (let p = 1; p <= this.playersNumber; p++) {
             setTimeout(() => {
-                this.players = [...this.players, new Player(3, p, this.deck.draw())]
+                this.players.push(new Player(3, p, this.deck.draw() as SingleCard))
             }, 500 * p)
         }
     }
+
+    public giveCards(): void {
+        this.players.forEach((p, i) => {
+            setTimeout(() => {
+                p.card = this.deck.draw()
+            }, 500 * i)
+        })
+
+    }
+
+
 
     public updatePlayerStatus(playerPosition: number, status: Status) {
         this.players[playerPosition - 1].status = status

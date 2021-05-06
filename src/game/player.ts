@@ -1,5 +1,4 @@
 import { PlayerData, SingleCard, Lives, Status } from "../types"
-import { Card } from "./deck";
 
 export class Player implements PlayerData {
 
@@ -8,11 +7,16 @@ export class Player implements PlayerData {
     public position: number
     public status: Status
 
-    constructor(lives: Lives, position: number, card: SingleCard) {
+    constructor(lives: Lives, position: number, card?: SingleCard, isDealer?: boolean) {
 
-        this.card = new Card(card.suit, card.rank)
+        this.card = card ? card : null
 
-        this.status = [9, 10].includes(this.card.rank) ? 'isDone' : 'isWaiting'
+        if (card) {
+            this.status = [9, 10].includes(this.card!.rank) ? 'isDone' : 'isWaiting'
+        }
+        else {
+            this.status = 'isWaiting'
+        }
 
         this.position = position
         this.lives = lives
@@ -21,6 +25,7 @@ export class Player implements PlayerData {
     public removeCard(receivingCard: SingleCard): void {
         this.card = receivingCard
     }
+
     public removeLife(): void {
         this.lives--
     }

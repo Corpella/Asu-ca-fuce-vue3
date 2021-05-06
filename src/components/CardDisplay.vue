@@ -3,15 +3,15 @@
   <div class="card-display w-full">
     <template class="card" v-for="(p, i) in game.players" :key="i">
       <div class="card-image" :style="calcRotation(i)">
-        <div class="flipper" :class="showCards ? 'flip' : ''">
+        <div class="flipper" :class="state.showCards ? 'flip' : ''">
           <img
             :src="p.card.cardImage"
             alt="img"
-            :class="showCards ? '' : 'hidden'"
+            :class="state.showCards ? '' : 'hidden'"
           />
           <img
-            src="/public/cards/0.png"
-            :class="showCards ? 'hidden' : ''"
+            src="/cards/0.png"
+            :class="state.showCards ? 'hidden' : ''"
             alt=""
           />
         </div>
@@ -21,25 +21,38 @@
 </template>
 
 <script lang="ts">
-import { CSSProperties, defineComponent, onBeforeMount, ref } from 'vue'
+import {
+  CSSProperties,
+  defineComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+} from 'vue'
 
 import { Game } from '../game/game'
 import { GameType } from '../types'
 
 export default defineComponent({
   setup: () => {
-    const showCards = ref(false)
-
     const setVisibility = () => {
-      showCards.value = !showCards.value
+      state.showCards = !state.showCards
     }
+
     const game = ref<GameType | null>(null)
+
+    const state = reactive({
+      showCards: false as Boolean,
+    })
 
     const calcRotation = (index: number): CSSProperties => {
       const itemsCount = game.value!.players.length,
         itemAngle = 360 / itemsCount,
         itemWidth = 88,
-        uniqueAngle = (index + 1) * itemAngle
+        dealerOffset =
+          game.value!.dealerIndex * (360 / game.value!.playersNumber),
+        uniqueAngle = (index + 1) * itemAngle + dealerOffset
+
+      console.log(dealerOffset)
 
       return {
         transform: `rotate(-${uniqueAngle}deg) translate(${
@@ -50,9 +63,14 @@ export default defineComponent({
 
     onBeforeMount(() => {
       game.value = new Game(6)
-      game.value.startGame()
+      game.value.initPlayers()
     })
-    return { game, calcRotation, showCards, setVisibility }
+    return {
+      calcRotation,
+      state,
+      game,
+      setVisibility,
+    }
   },
 })
 </script>

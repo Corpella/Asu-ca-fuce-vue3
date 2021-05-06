@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full">
     <div class="w-1/5 flex justify-center">
-      <div>wewe</div>
+      <div>side</div>
     </div>
     <div class="w-3/5 flex justify-center center">
       <div class="game-view">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="w-1/5 flex justify-center">
-      <div>wewe</div>
+      <div>side</div>
     </div>
   </div>
 </template>
