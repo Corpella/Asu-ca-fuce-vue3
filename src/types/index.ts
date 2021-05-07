@@ -1,3 +1,5 @@
+import { Player } from "../game/player"
+
 export enum SuitEnum {
     b, c, d, s
 }
@@ -34,13 +36,18 @@ export interface PlayerData {
     removeLife(): void
 }
 
+export type PlayersList<T> = {
+    0: T,
+    1: T
+} & Array<T>
+
 
 export interface GameType {
     players: PlayerData[],
     dealerIndex: number,
+    currentPlayerIndex: number,
     playersNumber: number,
     initPlayers(): void,
     giveCards(): void,
     swapCards(fpIndex: number): void
-
 }

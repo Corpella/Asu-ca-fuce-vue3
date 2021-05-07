@@ -55,7 +55,7 @@ export default defineComponent({
       console.log(dealerOffset)
 
       return {
-        transform: `rotate(-${uniqueAngle}deg) translate(${
+        transform: `rotate(${uniqueAngle}deg) translate(${
           itemWidth * 3.5
         }px) rotate(${90}deg)`,
       }

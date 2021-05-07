@@ -13,16 +13,20 @@ export class Game implements GameType {
 
     public dealerIndex: number
 
+    public currentPlayerIndex: number
+
     constructor(playersNumber: number) {
         this.deck = new Deck() as DeckType
         this.deck.shuffle()
         this.playersNumber = playersNumber
         this.players = []
         this.dealerIndex = 0
+        this.currentPlayerIndex = this.dealerIndex + 1
+
     }
 
     public initPlayers(): void {
-        for (let p = 1; p <= this.playersNumber; p++) {
+        for (let p = 0; p < this.playersNumber; p++) {
             setTimeout(() => {
                 this.players.push(new Player(3, p, this.deck.draw() as SingleCard))
             }, 500 * p)
@@ -35,6 +39,16 @@ export class Game implements GameType {
                 p.card = this.deck.draw()
             }, 500 * i)
         })
+
+    }
+
+    public canSwapWith(): PlayerData[] {
+        if (this.currentPlayerIndex < this.dealerIndex) {
+            return this.players.slice(this.currentPlayerIndex + 1, this.dealerIndex)
+        }
+        else {
+            return [...this.players.slice(this.currentPlayerIndex + 1, this.playersNumber), ...this.players.slice(0, this.dealerIndex)]
+        }
 
     }
 
